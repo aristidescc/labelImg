@@ -841,7 +841,8 @@ class MainWindow(QMainWindow, WindowMixin):
             self.addLabel(shape)
         self.updateComboBox()
         self.canvas.loadShapes(s)
-        self.valueTextLine.setText(s[-1].value)
+        if len(s):
+            self.valueTextLine.setText(s[-1].value)
 
         
 
