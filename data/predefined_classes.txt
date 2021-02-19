@@ -1,15 +1,30 @@
-dog
-person
-cat
-tv
-car
-meatballs
-marinara sauce
-tomato soup
-chicken noodle soup
-french onion soup
-chicken breast
-ribs
-pulled pork
-hamburger
-cavity
+logo-empresa
+key-nombre-trabajador
+value-nombre-trabajador
+key-cargo-trabajador
+value-cargo-trabajador
+key-dias-trabajados
+value-dias-trabajados
+key-rut-trabajador
+value-rut-trabajador
+nombre-empresa
+key-rut-empresa
+value-rut-empresa
+key-sueldo-base
+value-sueldo-base
+key-bono-parada
+value-bono-parada
+key-bono-horas-extras
+value-bono-horas-extras
+key-bono-gratificacion
+value-bono-gratificacion
+key-AFP
+value-AFP
+key-isapre
+value-isapre
+key-seguro
+value-seguro
+key-liquido
+value-liquido
+key-alcance-liquido
+value-alcance-liquido

@@ -31,6 +31,7 @@ from libs.combobox import ComboBox
 from libs.resources import *
 from libs.constants import *
 from libs.utils import *
+from libs.ocr import *
 from libs.settings import Settings
 from libs.shape import Shape, DEFAULT_LINE_COLOR, DEFAULT_FILL_COLOR
 from libs.stringBundle import StringBundle
@@ -128,6 +129,20 @@ class MainWindow(QMainWindow, WindowMixin):
         useDefaultLabelContainer = QWidget()
         useDefaultLabelContainer.setLayout(useDefaultLabelQHBoxLayout)
 
+        self.valueTextLine = QLineEdit()
+        self.valueTextLine.setEnabled(False)
+        self.valueTextLine.textChanged.connect(self.updateValue)
+        self.scanButton = newButton(getStr('scanText'), 'scan', self.scan)
+        self.scanButton.setEnabled(False)
+        labelWidget = QLabel(getStr('valueText'))        
+        valueLayout = QHBoxLayout()
+        valueLayout.addWidget(labelWidget)
+        valueLayout.addWidget(self.valueTextLine)
+        valueLayout.addWidget(self.scanButton)
+        valueContainer = QWidget()
+        valueContainer.setLayout(valueLayout)
+
+
         # Create a widget for edit and diffc button
         self.diffcButton = QCheckBox(getStr('useDifficult'))
         self.diffcButton.setChecked(False)
@@ -139,6 +154,7 @@ class MainWindow(QMainWindow, WindowMixin):
         listLayout.addWidget(self.editButton)
         listLayout.addWidget(self.diffcButton)
         listLayout.addWidget(useDefaultLabelContainer)
+        listLayout.addWidget(valueContainer)
 
         # Create and add combobox for showing unique labels in group
         self.comboBox = ComboBox(self)
@@ -614,6 +630,9 @@ class MainWindow(QMainWindow, WindowMixin):
         self.canvas.resetState()
         self.labelCoordinates.clear()
         self.comboBox.cb.clear()
+        self.valueTextLine.setEnabled(False)
+        self.valueTextLine.setText('')
+        self.scanButton.setEnabled(False)
 
     def currentItem(self):
         items = self.labelList.selectedItems()
@@ -757,8 +776,12 @@ class MainWindow(QMainWindow, WindowMixin):
             shape = self.canvas.selectedShape
             if shape:
                 self.shapesToItems[shape].setSelected(True)
+                self.valueTextLine.setText(shape.value)
             else:
                 self.labelList.clearSelection()
+                self.valueTextLine.setText('')
+        self.scanButton.setEnabled(selected)
+        self.valueTextLine.setEnabled(selected)
         self.actions.delete.setEnabled(selected)
         self.actions.copy.setEnabled(selected)
         self.actions.edit.setEnabled(selected)
@@ -790,7 +813,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def loadLabels(self, shapes):
         s = []
-        for label, points, line_color, fill_color, difficult in shapes:
+        for label, points, line_color, fill_color, difficult, value in shapes:
             shape = Shape(label=label)
             for x, y in points:
 
@@ -801,6 +824,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
                 shape.addPoint(QPointF(x, y))
             shape.difficult = difficult
+            shape.value = value
             shape.close()
             s.append(shape)
 
@@ -817,6 +841,9 @@ class MainWindow(QMainWindow, WindowMixin):
             self.addLabel(shape)
         self.updateComboBox()
         self.canvas.loadShapes(s)
+        self.valueTextLine.setText(s[-1].value)
+
+        
 
     def updateComboBox(self):
         # Get the unique labels and add them to the Combobox.
@@ -841,7 +868,8 @@ class MainWindow(QMainWindow, WindowMixin):
                         fill_color=s.fill_color.getRgb(),
                         points=[(p.x(), p.y()) for p in s.points],
                        # add chris
-                        difficult = s.difficult)
+                        difficult = s.difficult,
+                        value = s.value)
 
         shapes = [format_shape(shape) for shape in self.canvas.shapes]
         # Can add differrent annotation formats here
@@ -1559,6 +1587,19 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def toogleDrawSquare(self):
         self.canvas.setDrawingShapeToSquare(self.drawSquaresOption.isChecked())
+
+    def scan(self):
+        selected = self.currentItem()
+        if selected:
+            selectedShape = self.itemsToShapes[selected]
+            self.valueTextLine.setText(scanShape(self.filePath, selectedShape))
+        self.setDirty()
+
+    def updateValue(self, text):
+        selected = self.currentItem()
+        if selected:
+            selectedShape = self.itemsToShapes[selected]
+            selectedShape.value = text
 
 def inverted(color):
     return QColor(*[255 - v for v in color.getRgb()])

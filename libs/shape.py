@@ -38,8 +38,9 @@ class Shape(object):
     scale = 1.0
     labelFontSize = 8
 
-    def __init__(self, label=None, line_color=None, difficult=False, paintLabel=False):
+    def __init__(self, label=None, line_color=None, difficult=False, paintLabel=False, value=None):
         self.label = label
+        self.value = value
         self.points = []
         self.fill = False
         self.selected = False
@@ -157,6 +158,23 @@ class Shape(object):
             if distance(p - point) <= epsilon:
                 return i
         return None
+
+    def vertices(self):
+        min_x = sys.maxsize
+        min_y = sys.maxsize
+        max_x = -1
+        max_y = -1
+        for p in self.points:
+            if p.x() < min_x:
+                min_x = p.x()
+            if p.x() > max_x:
+                max_x = p.x()
+            if p.y() < min_y:
+                min_y = p.y()
+            if p.y() > max_y:
+                max_y = p.y()
+        return (min_x, min_y, max_x, max_y)
+
 
     def containsPoint(self, point):
         return self.makePath().contains(point)

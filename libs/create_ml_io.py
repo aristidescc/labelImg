@@ -47,6 +47,7 @@ class CreateMLWriter:
 
             shapedict = {
                 "label": shape["label"],
+                "value": shape["value"],
                 "coordinates": {
                     "x": x,
                     "y": y,
@@ -115,9 +116,9 @@ class CreateMLReader:
         for image in outputdict:
             if image["image"] == self.filename:
                 for shape in image["annotations"]:
-                    self.add_shape(shape["label"], shape["coordinates"])
+                    self.add_shape(shape["label"], shape.get('value', ''), shape["coordinates"])
 
-    def add_shape(self, label, bndbox):
+    def add_shape(self, label, value, bndbox):
         xmin = bndbox["x"] - (bndbox["width"] / 2)
         ymin = bndbox["y"] - (bndbox["height"] / 2)
 
@@ -125,7 +126,7 @@ class CreateMLReader:
         ymax = bndbox["y"] + (bndbox["height"] / 2)
 
         points = [(xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax)]
-        self.shapes.append((label, points, None, None, True))
+        self.shapes.append((label, points, None, None, True, value))
 
     def get_shapes(self):
         return self.shapes
