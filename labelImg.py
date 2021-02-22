@@ -969,6 +969,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
             if text not in self.labelHist:
                 self.labelHist.append(text)
+            self.canvas.selectShape(shape)
         else:
             # self.canvas.undoLastLine()
             self.canvas.resetAllLines()

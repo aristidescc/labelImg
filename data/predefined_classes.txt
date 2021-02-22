@@ -12,6 +12,8 @@ key-rut-empresa
 value-rut-empresa
 key-sueldo-base
 value-sueldo-base
+haberes
+descuentos
 key-bono-parada
 value-bono-parada
 key-bono-horas-extras
