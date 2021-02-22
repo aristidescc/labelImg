@@ -1595,13 +1595,15 @@ class MainWindow(QMainWindow, WindowMixin):
         if selected:
             selectedShape = self.itemsToShapes[selected]
             self.valueTextLine.setText(scanShape(self.filePath, selectedShape))
-        self.setDirty()
+            self.setDirty()
 
     def updateValue(self, text):
         selected = self.currentItem()
         if selected:
             selectedShape = self.itemsToShapes[selected]
-            selectedShape.value = text
+            if text != selectedShape.value:
+                selectedShape.value = text
+                self.setDirty()
 
 def inverted(color):
     return QColor(*[255 - v for v in color.getRgb()])
