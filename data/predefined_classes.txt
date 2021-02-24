@@ -10,6 +10,10 @@ value-rut-trabajador
 nombre-empresa
 key-rut-empresa
 value-rut-empresa
+key-mes-liquidacion
+value-mes-liquidacion
+key-anio-liquidacion
+value-anio-liquidacion
 key-sueldo-base
 value-sueldo-base
 haberes
