@@ -33,6 +33,8 @@ key-bono-responsabilidad
 value-bono-responsabilidad
 key-bono-imponible
 value-bono-imponible
+key-bono-incentivo
+value-bono-incentivo
 key-asig-viaticos
 value-asig-viaticos
 key-asig-movilizacion
@@ -45,8 +47,11 @@ key-desc-com-AFP
 value-desc-com-AFP
 key-isapre
 value-isapre
+key-isapre-adic
+value-isapre-adic
 key-seguro
 value-seguro
+key-seguro-cesantia
 value-seguro-cesantia
 key-impuestos
 value-impuestos
