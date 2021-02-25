@@ -179,6 +179,8 @@ class MainWindow(QMainWindow, WindowMixin):
 
         self.fileListWidget = QListWidget()
         self.fileListWidget.itemDoubleClicked.connect(self.fileitemDoubleClicked)
+        self.selectedFilePath = None
+        self.fileListWidget.currentItemChanged.connect(self.fileitemChanged)
         filelistLayout = QVBoxLayout()
         filelistLayout.setContentsMargins(0, 0, 0, 0)
         filelistLayout.addWidget(self.fileListWidget)
@@ -231,6 +233,9 @@ class MainWindow(QMainWindow, WindowMixin):
 
         copyPrevBounding = action(getStr('copyPrevBounding'), self.copyPreviousBoundingBoxes,
                          'Ctrl+v', 'paste', getStr('copyPrevBounding'))
+
+        copySelectedBounding = action(getStr('copySelectedBounding'), self.copySelectedBoundingBoxes,
+                    'Ctrl+w', 'paste', getStr('copySelectedBounding'))
 
         changeSavedir = action(getStr('changeSaveDir'), self.changeSavedirDialog,
                                'Ctrl+r', 'open', getStr('changeSavedAnnotationDir'))
@@ -412,7 +417,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.displayLabelOption.triggered.connect(self.togglePaintLabelsOption)
 
         addActions(self.menus.file,
-                   (open, opendir, copyPrevBounding, changeSavedir, openAnnotation, self.menus.recentFiles, save, save_format, saveAs, close, resetAll, deleteImg, quit))
+                   (open, opendir, copyPrevBounding, copySelectedBounding, changeSavedir, openAnnotation, self.menus.recentFiles, save, save_format, saveAs, close, resetAll, deleteImg, quit))
         addActions(self.menus.help, (help, showInfo))
         addActions(self.menus.view, (
             self.autoSaving,
@@ -740,6 +745,20 @@ class MainWindow(QMainWindow, WindowMixin):
             filename = self.mImgList[currIndex]
             if filename:
                 self.loadFile(filename)
+    
+    def fileitemChanged(self, current=None, previous=None):
+        if current is not None:
+            currIndex = self.mImgList.index(ustr(current.text()))
+            if currIndex < len(self.mImgList):
+                filename = self.mImgList[currIndex]
+                if filename:
+                    self.selectedFilePath = filename
+                else:
+                    self.selectedFilePath = None
+            else:
+                self.selectedFilePath = None
+        else:
+            self.selectedFilePath = None
 
     # Add chris
     def btnstate(self, item= None):
@@ -1581,6 +1600,11 @@ class MainWindow(QMainWindow, WindowMixin):
         if currIndex - 1 >= 0:
             prevFilePath = self.mImgList[currIndex - 1]
             self.showBoundingBoxFromAnnotationFile(prevFilePath)
+            self.saveFile()
+
+    def copySelectedBoundingBoxes(self):
+        if self.selectedFilePath is not None:
+            self.showBoundingBoxFromAnnotationFile(self.selectedFilePath)
             self.saveFile()
 
     def togglePaintLabelsOption(self):
