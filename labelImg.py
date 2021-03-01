@@ -295,6 +295,7 @@ class MainWindow(QMainWindow, WindowMixin):
         copy = action(getStr('dupBox'), self.copySelectedShape,
                       'Ctrl+D', 'copy', getStr('dupBoxDetail'),
                       enabled=False)
+        self.scanAction = action(getStr('scanText'), self.scan, 'Ctrl+N', 'scan', getStr('scanTextDetail'), enabled=False)
 
         advancedMode = action(getStr('advancedMode'), self.toggleAdvancedMode,
                               'Ctrl+Shift+A', 'expert', getStr('advancedModeDetail'),
@@ -591,8 +592,8 @@ class MainWindow(QMainWindow, WindowMixin):
         self.canvas.menus[0].clear()
         addActions(self.canvas.menus[0], menu)
         self.menus.edit.clear()
-        actions = (self.actions.create,) if self.beginner()\
-            else (self.actions.createMode, self.actions.editMode)
+        actions = (self.actions.create, self.scanAction) if self.beginner()\
+            else (self.actions.createMode, self.actions.editMode, self.scanAction)
         addActions(self.menus.edit, actions + self.actions.editMenu)
 
     def setBeginner(self):
@@ -638,6 +639,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.valueTextLine.setEnabled(False)
         self.valueTextLine.setText('')
         self.scanButton.setEnabled(False)
+        self.scanAction.setEnabled(False)
 
     def currentItem(self):
         items = self.labelList.selectedItems()
@@ -800,6 +802,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 self.labelList.clearSelection()
                 self.valueTextLine.setText('')
         self.scanButton.setEnabled(selected)
+        self.scanAction.setEnabled(selected)
         self.valueTextLine.setEnabled(selected)
         self.actions.delete.setEnabled(selected)
         self.actions.copy.setEnabled(selected)
