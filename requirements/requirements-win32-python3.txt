@@ -1,0 +1,5 @@
+pyqt5
+lxml 
+pandas 
+opencv-python 
+pytesseract
