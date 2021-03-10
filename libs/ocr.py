@@ -1,6 +1,13 @@
 import pytesseract
 import cv2
 import math
+import os
+import sys
+
+if sys.platform=='win32':
+  pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+  if os.getenv("TESSERACT_CMD") is not None:
+    pytesseract.pytesseract.tesseract_cmd = os.getenv("TESSERACT_CMD") 
 
 def scanShape(filePath, shape):
   # Load file from original path
