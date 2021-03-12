@@ -2,7 +2,7 @@ from cx_Freeze import setup, Executable
 
 # Dependencies are automatically detected, but it might need
 # fine tuning.
-build_options = {'packages': ["os"], 'excludes': [], "include_files": ["data"]}
+build_options = {'packages': ["os"], 'excludes': [], "include_files": ["data", "tesseract"]}
 
 base = 'Console'
 

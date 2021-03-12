@@ -27,3 +27,4 @@ cscope*
 ehthumbs.db
 Thumbs.db
 .eggs/
+tesseract/

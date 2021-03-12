@@ -3,6 +3,7 @@ from libs.ustr import ustr
 import hashlib
 import re
 import sys
+import os
 
 try:
     from PyQt5.QtGui import *
@@ -101,3 +102,14 @@ def natural_sort(list, key=lambda s:s):
         return lambda s: [convert(c) for c in re.split('([0-9]+)', key(s))]
     sort_key = get_alphanum_key_func(key)
     list.sort(key=sort_key)
+ 
+def base_path():
+    import __main__
+    if getattr(sys, "frozen", False):
+        # The application is frozen
+        datadir = os.path.dirname(sys.executable)
+    else:
+        # The application is not frozen
+        # Change this bit to match where you store your data files:
+        datadir = os.path.dirname(__main__.__file__)
+    return datadir
