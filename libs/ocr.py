@@ -5,12 +5,12 @@ import os
 import sys
 import libs.utils
 
-tesseract_cmd = 'tesseract'
+tesseract_cmd =  os.path.join('bin','tesseract')
 
 if sys.platform=='win32':
   tesseract_cmd = 'tesseract.exe'
   
-pytesseract.pytesseract.tesseract_cmd = os.path.join(libs.utils.base_path(), "tesseract", 'bin', tesseract_cmd)
+pytesseract.pytesseract.tesseract_cmd = os.path.join(libs.utils.base_path(), "tesseract", tesseract_cmd)
 
 if os.getenv("TESSERACT_CMD") is not None:
    pytesseract.pytesseract.tesseract_cmd = os.getenv("TESSERACT_CMD") 
